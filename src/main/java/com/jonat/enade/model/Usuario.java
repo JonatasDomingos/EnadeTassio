@@ -7,6 +7,7 @@ package com.jonat.enade.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -63,6 +64,7 @@ public class Usuario implements Serializable {
     @Column(name = "senha")
     private String senha;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioidUsuario")
+    @JsonbTransient
     private List<Resultado> resultadoList;
     @JoinColumn(name = "TipoUsuario_idTipoUsuario", referencedColumnName = "idTipoUsuario")
     @ManyToOne(optional = false)

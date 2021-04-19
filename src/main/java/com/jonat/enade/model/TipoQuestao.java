@@ -7,6 +7,7 @@ package com.jonat.enade.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,6 +49,7 @@ public class TipoQuestao implements Serializable {
     @Column(name = "nomeTipoQuestao")
     private String nomeTipoQuestao;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoQuestaoidTipoQuestao")
+    @JsonbTransient
     private List<Questao> questaoList;
 
     public TipoQuestao() {

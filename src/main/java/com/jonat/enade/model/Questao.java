@@ -7,6 +7,7 @@ package com.jonat.enade.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -75,6 +76,7 @@ public class Questao implements Serializable {
     @Column(name = "estadoQuestao")
     private Short estadoQuestao;
     @ManyToMany(mappedBy = "questaoList")
+    @JsonbTransient
     private List<Prova> provaList;
     @JoinColumn(name = "TipoQuestao_idTipoQuestao", referencedColumnName = "idTipoQuestao")
     @ManyToOne(optional = false)
