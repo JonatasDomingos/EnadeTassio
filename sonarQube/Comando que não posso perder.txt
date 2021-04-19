@@ -1,0 +1,4 @@
+mvn sonar:sonar \
+  -Dsonar.projectKey=TrabalhoTassio_Enade \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=fb512be2a49f2b4021043f58ffe9f8f99f833baf
