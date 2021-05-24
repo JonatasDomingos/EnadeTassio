@@ -13,17 +13,8 @@ import com.jonat.enade.model.TipoUsuario;
  */
 public class TipoUsuarioDAO extends GenericDAO<TipoUsuario, Integer> {
 
-    public static TipoUsuarioDAO tipoUsuarioDAO;
-
     public TipoUsuarioDAO() {
         super(TipoUsuario.class);
-    }
-
-    public static TipoUsuarioDAO getInstance() {
-        if (tipoUsuarioDAO == null) {
-            tipoUsuarioDAO = new TipoUsuarioDAO();
-        }
-        return tipoUsuarioDAO;
     }
 
 }

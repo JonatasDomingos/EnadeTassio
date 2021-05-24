@@ -8,6 +8,7 @@ package com.jonat.enade.dao;
 import com.jonat.enade.util.PersistenceUtil;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -53,6 +54,7 @@ public abstract class GenericDAO<T, I extends Serializable> {
             t.commit();
         } catch (Exception e) {
             t.rollback();
+            Logger.getLogger(e.getMessage());
         }
         return entity;
     }
@@ -68,6 +70,7 @@ public abstract class GenericDAO<T, I extends Serializable> {
             t.commit();
         } catch (Exception e) {
             t.rollback();
+            Logger.getLogger(e.getMessage());
         }
     }
 
@@ -80,6 +83,7 @@ public abstract class GenericDAO<T, I extends Serializable> {
             t.commit();
         } catch (Exception e) {
             t.rollback();
+            Logger.getLogger(e.getMessage());
         }
     }
 

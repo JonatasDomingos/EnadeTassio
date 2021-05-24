@@ -5,14 +5,18 @@
  */
 package com.jonat.enade.controller;
 
+import com.jonat.enade.dao.FactoryDAO;
 import com.jonat.enade.dao.QuestaoDAO;
 import com.jonat.enade.model.Questao;
-import java.awt.event.ActionEvent;
+import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -22,24 +26,41 @@ import javax.inject.Named;
 @ViewScoped
 public class QuestaoController implements Serializable {
 
+    private final FactoryDAO factoryDAO = new FactoryDAO();
+    private final Class<QuestaoDAO> daoClass;
+
     Questao questao = new Questao();
     List<Questao> questoes = new ArrayList<>();
 
     public QuestaoController() {
-        questoes = QuestaoDAO.getInstance().findAll();
+        daoClass = QuestaoDAO.class;
+        questoes = factoryDAO.getInstance(daoClass).findAll();
         questao = new Questao();
     }
 
     public void gravar(ActionEvent actionEvent) {
-        QuestaoDAO.getInstance().merge(questao);
-        questoes = QuestaoDAO.getInstance().findAll();
+        factoryDAO.getInstance(daoClass).merge(questao);
+        questoes = factoryDAO.getInstance(daoClass).findAll();
         questao = new Questao();
     }
 
     public void remover(ActionEvent actionEvent) {
-        QuestaoDAO.getInstance().remove(questao.getIdQuestao());
-        questoes = QuestaoDAO.getInstance().findAll();
+        factoryDAO.getInstance(daoClass).remove(questao.getIdQuestao());
+        questoes = factoryDAO.getInstance(daoClass).findAll();
         questao = new Questao();
+    }
+
+    public void onRowEdit(RowEditEvent event) {
+        Questao obj = (Questao) event.getObject();
+        setQuestao(obj);
+        gravar(null);
+        FacesMessage msg = new FacesMessage("Editado", obj.getIdQuestao().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowCancel(RowEditEvent<Questao> event) {
+        FacesMessage msg = new FacesMessage("Cancelado", event.getObject().getIdQuestao().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public Questao getQuestao() {

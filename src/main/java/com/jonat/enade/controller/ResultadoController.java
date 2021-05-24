@@ -5,9 +5,10 @@
  */
 package com.jonat.enade.controller;
 
+import com.jonat.enade.dao.FactoryDAO;
 import com.jonat.enade.dao.ResultadoDAO;
 import com.jonat.enade.model.Resultado;
-import java.awt.event.ActionEvent;
+import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,23 +23,27 @@ import javax.inject.Named;
 @ViewScoped
 public class ResultadoController implements Serializable {
 
+    private final FactoryDAO factoryDAO = new FactoryDAO();
+    private final Class<ResultadoDAO> daoClass;
+
     Resultado resultado = new Resultado();
     List<Resultado> resultados = new ArrayList<>();
 
     public ResultadoController() {
-        resultados = ResultadoDAO.getInstance().findAll();
+        daoClass = ResultadoDAO.class;
+        resultados = factoryDAO.getInstance(daoClass).findAll();
         resultado = new Resultado();
     }
 
     public void gravar(ActionEvent actionEvent) {
-        ResultadoDAO.getInstance().merge(resultado);
-        resultados = ResultadoDAO.getInstance().findAll();
+        factoryDAO.getInstance(daoClass).merge(resultado);
+        resultados = factoryDAO.getInstance(daoClass).findAll();
         resultado = new Resultado();
     }
 
     public void remover(ActionEvent actionEvent) {
-        ResultadoDAO.getInstance().remove(resultado.getIdResultado());
-        resultados = ResultadoDAO.getInstance().findAll();
+        factoryDAO.getInstance(daoClass).remove(resultado.getIdResultado());
+        resultados = factoryDAO.getInstance(daoClass).findAll();
         resultado = new Resultado();
     }
 

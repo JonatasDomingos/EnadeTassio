@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 
 /**
  *
- * @author mathe
+ * @author jonat
  */
 public class ResultadoResourceTest {
 

@@ -5,14 +5,18 @@
  */
 package com.jonat.enade.controller;
 
+import com.jonat.enade.dao.FactoryDAO;
 import com.jonat.enade.dao.ProvaDAO;
 import com.jonat.enade.model.Prova;
-import java.awt.event.ActionEvent;
+import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -22,24 +26,41 @@ import javax.inject.Named;
 @ViewScoped
 public class ProvaController implements Serializable {
 
+    private final FactoryDAO factoryDAO = new FactoryDAO();
+    private final Class<ProvaDAO> daoClass;
+
     Prova prova = new Prova();
     List<Prova> provas = new ArrayList<>();
 
     public ProvaController() {
-        provas = ProvaDAO.getInstance().findAll();
+        daoClass = ProvaDAO.class;
+        provas = factoryDAO.getInstance(daoClass).findAll();
         prova = new Prova();
     }
 
     public void gravar(ActionEvent actionEvent) {
-        ProvaDAO.getInstance().merge(prova);
-        provas = ProvaDAO.getInstance().findAll();
+        factoryDAO.getInstance(daoClass).merge(prova);
+        provas = factoryDAO.getInstance(daoClass).findAll();
         prova = new Prova();
     }
 
     public void remover(ActionEvent actionEvent) {
-        ProvaDAO.getInstance().remove(prova.getIdProva());
-        provas = ProvaDAO.getInstance().findAll();
+        factoryDAO.getInstance(daoClass).remove(prova.getIdProva());
+        provas = factoryDAO.getInstance(daoClass).findAll();
         prova = new Prova();
+    }
+
+    public void onRowEdit(RowEditEvent event) {
+        Prova obj = (Prova) event.getObject();
+        setProva(obj);
+        gravar(null);
+        FacesMessage msg = new FacesMessage("Editado", obj.toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowCancel(RowEditEvent<Prova> event) {
+        FacesMessage msg = new FacesMessage("Cancelado", event.getObject().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public Prova getProva() {

@@ -13,17 +13,8 @@ import com.jonat.enade.model.Resultado;
  */
 public class ResultadoDAO extends GenericDAO<Resultado, Integer> {
 
-    public static ResultadoDAO resultadoDAO;
-
     public ResultadoDAO() {
         super(Resultado.class);
-    }
-
-    public static ResultadoDAO getInstance() {
-        if (resultadoDAO == null) {
-            resultadoDAO = new ResultadoDAO();
-        }
-        return resultadoDAO;
     }
 
 }

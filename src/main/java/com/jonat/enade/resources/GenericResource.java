@@ -5,9 +5,9 @@
  */
 package com.jonat.enade.resources;
 
-import com.jonat.enade.dao.TipoQuestaoDAO;
-import com.jonat.enade.model.TipoQuestao;
-import java.io.Serializable;
+import com.jonat.enade.dao.GenericDAO;
+import com.jonat.enade.dao.FactoryDAO;
+import com.jonat.enade.util.Constants;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -22,35 +22,46 @@ import javax.ws.rs.core.MediaType;
  *
  * @author jonat
  * @param <T>
- * @param <I>
+ * @param <D>
  */
-public abstract class GenericResource<T, I extends Serializable> {
-    
+public abstract class GenericResource<T, D extends GenericDAO> {
+
+    private final FactoryDAO factoryDAO = new FactoryDAO();
+    private Class<D> daoClass;
+
+    protected GenericResource() {
+    }
+
+    protected GenericResource(Class<D> daoClass) {
+        this();
+        this.daoClass = daoClass;
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/findAll")
-    public List<TipoQuestao> findAll() {
-        List<TipoQuestao> entityList = TipoQuestaoDAO.getInstance().findAll();
+    public List<T> findAll() {
+        List<T> entityList = factoryDAO.getInstance(daoClass).findAll();
         return entityList;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/find/{id}")
-    public TipoQuestao find(@PathParam("id") Integer id) {
-        return TipoQuestaoDAO.getInstance().find(id);
+    public T find(@PathParam("id") Integer id) {
+        return (T) factoryDAO.getInstance(daoClass).find(id);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/merge")
-    public String merge(TipoQuestao entity) {
+    public String merge(T entity) {
         try {
-            TipoQuestaoDAO.getInstance().merge(entity).toString();
-            return "Registrado com sucesso!!";
+            factoryDAO.getInstance(daoClass).merge(entity).toString();
+            return Constants.REGISTRO_SALVO;
         } catch (Exception e) {
-            return "Erro ao salvar um registro! " + e.getMessage();
+            return Constants.ERRO_SALVAR_REGISTRO + e.getMessage();
         }
     }
 
@@ -59,10 +70,10 @@ public abstract class GenericResource<T, I extends Serializable> {
     @Path("/removeAll")
     public String removeAll() {
         try {
-            TipoQuestaoDAO.getInstance().removeAll();
-            return "Exclusão total feita com sucesso!";
+            factoryDAO.getInstance(daoClass).removeAll();
+            return Constants.TODOS_REGISTROS_EXCLUIDOS;
         } catch (Exception e) {
-            return "Erro ao excluir o registro! " + e.getMessage();
+            return Constants.ERRO_EXCLUIR_REGISTRO + e.getMessage();
         }
     }
 
@@ -70,12 +81,17 @@ public abstract class GenericResource<T, I extends Serializable> {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/remove/{id}")
     public String remove(@PathParam("id") Integer id) {
+        String result = Constants.REGISTRO_NAO_ENCONTRADO;
         try {
-            TipoQuestaoDAO.getInstance().remove(id);
-            return "Registro excluído com sucesso!";
+            T entityFind = find(id);
+            if (entityFind != null) {
+                factoryDAO.getInstance(daoClass).remove(id);
+                result = Constants.REGISTRO_EXCLUIDO;
+            }
         } catch (Exception e) {
-            return "Erro ao excluir o registro! " + e.getMessage();
+            result = Constants.ERRO_EXCLUIR_REGISTRO + e.getMessage();
         }
+        return result;
     }
 
 }

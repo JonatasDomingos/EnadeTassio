@@ -5,14 +5,18 @@
  */
 package com.jonat.enade.controller;
 
+import com.jonat.enade.dao.FactoryDAO;
 import com.jonat.enade.dao.TipoUsuarioDAO;
 import com.jonat.enade.model.TipoUsuario;
-import java.awt.event.ActionEvent;
+import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -22,24 +26,41 @@ import javax.inject.Named;
 @ViewScoped
 public class TipoUsuarioController implements Serializable {
 
+    private final FactoryDAO factoryDAO = new FactoryDAO();
+    private final Class<TipoUsuarioDAO> daoClass;
+
     TipoUsuario tipoUsuario = new TipoUsuario();
     List<TipoUsuario> tipoUsuarios = new ArrayList<>();
 
     public TipoUsuarioController() {
-        tipoUsuarios = TipoUsuarioDAO.getInstance().findAll();
+        daoClass = TipoUsuarioDAO.class;
+        tipoUsuarios = factoryDAO.getInstance(daoClass).findAll();
         tipoUsuario = new TipoUsuario();
     }
 
     public void gravar(ActionEvent actionEvent) {
-        TipoUsuarioDAO.getInstance().merge(tipoUsuario);
-        tipoUsuarios = TipoUsuarioDAO.getInstance().findAll();
+        factoryDAO.getInstance(daoClass).merge(tipoUsuario);
+        tipoUsuarios = factoryDAO.getInstance(daoClass).findAll();
         tipoUsuario = new TipoUsuario();
     }
 
     public void remover(ActionEvent actionEvent) {
-        TipoUsuarioDAO.getInstance().remove(tipoUsuario.getIdTipoUsuario());
-        tipoUsuarios = TipoUsuarioDAO.getInstance().findAll();
+        factoryDAO.getInstance(daoClass).remove(tipoUsuario.getIdTipoUsuario());
+        tipoUsuarios = factoryDAO.getInstance(daoClass).findAll();
         tipoUsuario = new TipoUsuario();
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        TipoUsuario obj = (TipoUsuario) event.getObject();
+        setTipoUsuario(obj);
+        gravar(null);
+        FacesMessage msg = new FacesMessage("Editado", obj.toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowCancel(RowEditEvent<TipoUsuario> event) {
+        FacesMessage msg = new FacesMessage("Cancelado", event.getObject().toString());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public TipoUsuario getTipoUsuario() {

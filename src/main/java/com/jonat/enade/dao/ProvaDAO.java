@@ -13,17 +13,8 @@ import com.jonat.enade.model.Prova;
  */
 public class ProvaDAO extends GenericDAO<Prova, Integer> {
 
-    public static ProvaDAO provaDAO;
-
     public ProvaDAO() {
         super(Prova.class);
-    }
-
-    public static ProvaDAO getInstance() {
-        if (provaDAO == null) {
-            provaDAO = new ProvaDAO();
-        }
-        return provaDAO;
     }
 
 }

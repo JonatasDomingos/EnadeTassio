@@ -5,6 +5,7 @@
  */
 package com.jonat.enade.resources;
 
+import com.jonat.enade.dao.TipoQuestaoDAO;
 import com.jonat.enade.model.TipoQuestao;
 import javax.ws.rs.Path;
 
@@ -13,5 +14,10 @@ import javax.ws.rs.Path;
  * @author jonat
  */
 @Path("tipoquestao")
-public class TipoQuestaoResource extends GenericResource<TipoQuestao, Integer> {
+public class TipoQuestaoResource extends GenericResource<TipoQuestao, TipoQuestaoDAO> {
+
+    public TipoQuestaoResource() {
+        super(TipoQuestaoDAO.class);
+    }
+
 }

@@ -13,17 +13,8 @@ import com.jonat.enade.model.Questao;
  */
 public class QuestaoDAO extends GenericDAO<Questao, Integer> {
 
-    public static QuestaoDAO questaoDAO;
-
     public QuestaoDAO() {
         super(Questao.class);
-    }
-
-    public static QuestaoDAO getInstance() {
-        if (questaoDAO == null) {
-            questaoDAO = new QuestaoDAO();
-        }
-        return questaoDAO;
     }
 
 }
