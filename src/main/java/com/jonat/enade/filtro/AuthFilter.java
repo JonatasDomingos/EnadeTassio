@@ -38,6 +38,9 @@ public class AuthFilter implements Filter {
             "/graficos.xhtml"
     );
 
+    
+    
+    
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
@@ -51,16 +54,17 @@ public class AuthFilter implements Filter {
             res.sendRedirect(req.getContextPath() + telaIndex);
         } else if (reqURI.contains(telaLogin) || usuarioLogado != null || reqURI.contains("javax.faces.resource")) {
             if (usuarioLogado == null) {
-                // Tratar se a variável usuário não está vazia
+                
+                
                 chain.doFilter(request, response);
             } else if (reqURI.contains("javax.faces.resource")) {
                 // Requisição de outros arquivos sem ser os xhtml
                 chain.doFilter(request, response);
             } else if (usuarioLogado.getTipoUsuarioidTipoUsuario().getNomeTipoUsuario().equals("Professor") && TELAS_PROFESSOR.contains(reqURI.replace("/Enade", ""))) {
-                // Acessar as telas permitidas de professor
+                // Acessar as telas de professor
                 chain.doFilter(request, response);
             } else if (usuarioLogado.getTipoUsuarioidTipoUsuario().getNomeTipoUsuario().equals("Aluno") && TELAS_ALUNO.contains(reqURI.replace("/Enade", ""))) {
-                // Acessar as telas permitidas de aluno
+                // Acessar as telas de aluno
                 chain.doFilter(request, response);
             } else if (!TELAS_PROFESSOR.contains(reqURI.replace("/Enade", "")) && !TELAS_ALUNO.contains(reqURI.replace("/Enade", ""))) {
                 // Tratar ao acessar uma página não encontrada
