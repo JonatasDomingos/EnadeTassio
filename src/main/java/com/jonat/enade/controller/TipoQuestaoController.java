@@ -7,15 +7,14 @@ package com.jonat.enade.controller;
 
 import com.jonat.enade.dao.FactoryDAO;
 import com.jonat.enade.dao.TipoQuestaoDAO;
-import com.jonat.enade.model.Questao;
 import com.jonat.enade.model.TipoQuestao;
 import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.event.RowEditEvent;
 
@@ -24,7 +23,7 @@ import org.primefaces.event.RowEditEvent;
  * @author jonat
  */
 @Named
-@ViewScoped
+@SessionScoped
 public class TipoQuestaoController implements Serializable {
 
     private final FactoryDAO factoryDAO = new FactoryDAO();

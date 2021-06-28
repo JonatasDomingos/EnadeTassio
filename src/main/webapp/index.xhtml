@@ -3,7 +3,7 @@
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="content">
         <center>
-            <h1>Bem-vindo ao sistema do Simulado ENADE</h1>
+            <h1>Olá #{loginController.usuarioLogin.nome}, bem-vindo ao Simulado ENADE #{loginController.usuarioLogin.tipoUsuarioidTipoUsuario.nomeTipoUsuario}</h1>
             <p:graphicImage name="imagens/logo.png" width="30%"/>
         </center>
     </ui:define>

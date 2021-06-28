@@ -59,6 +59,11 @@
                             <f:setPropertyActionListener target="#{usuarioController.usuario}"
                                                          value="#{valor}" />
                         </p:commandLink> 
+
+                        <p:commandLink value="Alterar senha" onclick="PF('changePassword').show();" class="ui-icon ui-icon-key"> 
+                            <f:setPropertyActionListener target="#{usuarioController.usuario}"
+                                                         value="#{valor}" />
+                        </p:commandLink> 
                     </p:column>
                 </p:dataTable>
             </h:form>
@@ -106,18 +111,50 @@
                         Nome:
                         <p:inputText value="#{usuarioController.usuario.nome}" />
                         E-mail:
-                        <p:inputText value="#{usuarioController.usuario.email}" />
+                        <p:inputText type="email" value="#{usuarioController.usuario.email}" required="true" />
                         Senha:
-                        <p:password value="#{usuarioController.usuario.senha}" />
-                        Tipo:
-                        <p:selectOneMenu value="#{usuarioController.usuario.tipoUsuarioidTipoUsuario}" converter="tipousuarioConverter" style="width: 89%">
-                            <f:selectItem itemLabel="Selecione" itemValue="" />
-                            <f:selectItems value="#{tipoUsuarioController.tipoUsuarios}" var="respname" itemLabel="#{respname.nomeTipoUsuario}" itemValue="#{respname}" />
-                        </p:selectOneMenu>
+                        <p:password 
+                            value="#{usuarioController.usuario.senha}" 
+                            feedback="true"
+                            promptLabel="Digite uma senha" 
+                            weakLabel="Fraca"
+                            goodLabel="Boa" 
+                            strongLabel="Forte"
+                            />
                     </p:panelGrid>
                     <br/>
                     <p:commandButton value="Salvar"  
                                      actionListener="#{usuarioController.gravar}" onclick="record.hide()" alt="Record"/> 
+                </h:form>
+            </p:dialog>
+
+            <p:dialog header="Alterar senha" widgetVar="changePassword" modal="true">
+                <h:form>
+                    <p:panelGrid id="panelRecord" columns="2">
+                        Senha
+                        <p:password 
+                            value="#{usuarioController.senha1}" 
+                            feedback="true"
+                            promptLabel="Digite uma senha" 
+                            weakLabel="Fraca"
+                            goodLabel="Boa" 
+                            strongLabel="Forte"
+                            redisplay="true" 
+                            />
+                        Repetir senha
+                        <p:password 
+                            value="#{usuarioController.senha2}" 
+                            feedback="true" 
+                            promptLabel="Digite uma senha" 
+                            weakLabel="Fraca"
+                            goodLabel="Boa" 
+                            strongLabel="Forte"
+                            redisplay="true" 
+                            />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="Salvar"  
+                                     actionListener="#{usuarioController.atualizarSenha}" onclick="changePassword.hide()" alt="Record"/> 
                 </h:form>
             </p:dialog>
 

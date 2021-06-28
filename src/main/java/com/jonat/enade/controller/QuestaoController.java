@@ -12,9 +12,9 @@ import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.event.RowEditEvent;
 
@@ -23,7 +23,7 @@ import org.primefaces.event.RowEditEvent;
  * @author jonat
  */
 @Named
-@ViewScoped
+@SessionScoped
 public class QuestaoController implements Serializable {
 
     private final FactoryDAO factoryDAO = new FactoryDAO();
@@ -31,22 +31,26 @@ public class QuestaoController implements Serializable {
 
     Questao questao = new Questao();
     List<Questao> questoes = new ArrayList<>();
+    List<Questao> questoesAtivas = new ArrayList<>();
 
     public QuestaoController() {
         daoClass = QuestaoDAO.class;
         questoes = factoryDAO.getInstance(daoClass).findAll();
+        questoesAtivas = factoryDAO.getInstance(daoClass).findQuestoesAtivas();
         questao = new Questao();
     }
 
     public void gravar(ActionEvent actionEvent) {
         factoryDAO.getInstance(daoClass).merge(questao);
         questoes = factoryDAO.getInstance(daoClass).findAll();
+        questoesAtivas = factoryDAO.getInstance(daoClass).findQuestoesAtivas();
         questao = new Questao();
     }
 
     public void remover(ActionEvent actionEvent) {
         factoryDAO.getInstance(daoClass).remove(questao.getIdQuestao());
         questoes = factoryDAO.getInstance(daoClass).findAll();
+        questoesAtivas = factoryDAO.getInstance(daoClass).findQuestoesAtivas();
         questao = new Questao();
     }
 
@@ -77,6 +81,14 @@ public class QuestaoController implements Serializable {
 
     public void setQuestoes(List<Questao> questoes) {
         this.questoes = questoes;
+    }
+
+    public List<Questao> getQuestoesAtivas() {
+        return questoesAtivas;
+    }
+
+    public void setQuestoesAtivas(List<Questao> questoesAtivas) {
+        this.questoesAtivas = questoesAtivas;
     }
 
 }
